@@ -1,9 +1,10 @@
     <?php
+
     include_once('config.php');
     include_once('err_handler.php');
     include_once('db_connect.php');
     include_once('functions.php');
-
+    //include_once('find_token.php');
 
 ///добавить автора
     if(preg_match_all("/^(add_creator)$/ui", $_GET['type'])){
@@ -259,7 +260,6 @@
 
     else if(preg_match_all("/^(update_area_name)$/ui", $_GET['type'])){
 
-       
 
         if(!isset($_GET['name'])){
             echo ajax_echo(
@@ -270,12 +270,25 @@
                 null
             );
             exit();
+        } else{
+            $name =  $_GET['name'];
         }
+
         
-        if(!isset($_GET['name2'])){
+        $name2 = '';
+        if(isset($_GET['name2'])){
+          $name2 = $_GET['name2'];
+        }
+        $area_id = '';
+        if(isset($_GET['id'])){
+          $area_id = $_GET['id'];
+        }
+
+
+        if(!isset($_GET['name2']) && !isset($_GET['id'])){
             echo ajax_echo(
                 "Ошибка!",
-                "Вы не указали Get параметр name!",
+                "Вы не указали Get параметр name2 или id!",
                 true,
                 "ERROR",
                 null
@@ -283,17 +296,18 @@
             exit();
         }
 
-        $area_id = '';
-        if(isset($_GET['area_id'])){
-          $area_id = $_GET['area_id'];
+        
+
+        $query = "UPDATE `type_area` SET `name`= '" .$name. "' WHERE ";   
+        if(iconv_strlen($name2) > 0 ){
+            $query .= " `name`= '".$name2."' ";
+        }
+        if(iconv_strlen($name2) > 0 && iconv_strlen($area_id) > 0 ){
+            $query .= " AND ";
         }
 
-        $query = "UPDATE `type_area` SET `name`= '".$_GET['name']."' WHERE `name`= '".$_GET['name2']."'";
-
-        if(iconv_strlen($area_id) == 0 || preg_match_all("/^(NULL)$/ui", $area_id)){
-            $query .= " ";
-        } else {
-            $query .= "AND `id`='".$area_id."'";
+        if(iconv_strlen($area_id) > 0){
+            $query .= " `id`='".$area_id."'";
         }     
         $query .= ";";
 
