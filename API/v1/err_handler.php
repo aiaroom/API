@@ -3,7 +3,7 @@
 set_error_handler('err_handler');
 function err_handler($errno, $errmsg, $filename, $linenum){
 
-    $path_error_log = "D:/Server/data/htdocs/DDPT/Alisa/error.log";
+    $path_error_log = "../error.log";
     $date = date("Y-m-d H:i:s (T)");
 
     file_put_contents($path_error_log, json_encode(array(
