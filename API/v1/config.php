@@ -1,8 +1,8 @@
 <?php
 
 $DB = array(
-    "login" => "user1",
-    "password" => "user1",
+    "login" => "**",
+    "password" => "**",
     "host" => "localhost",
     "name" => "gallery",  // название бд кто будет менять?
     "charset" => "utf8"
