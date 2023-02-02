@@ -351,6 +351,13 @@ else if(preg_match_all("/^(update_location_art)$/ui", $_GET['type'])){
         exit();
     }
 
+
+
+    $id = '';
+    if(isset($_GET['id'])){
+      $id = $_GET['id'];
+    }
+
         $name = '';
         if(isset($_GET['name'])){
           $name = $_GET['name'];
@@ -370,16 +377,17 @@ else if(preg_match_all("/^(update_location_art)$/ui", $_GET['type'])){
           $middle_name = $_GET['middle_name'];
         }
 
-        $query = "UPDATE `art` SET `hall_id`= '" . $_GET['hall'] . "'";
+        $query = "UPDATE `art` INNER JOIN `creaters` on `art`.`creater_id` = `creaters`.`id` SET `hall_id`= '" . $_GET['hall'] . "'";
         
-        $query .= " INNER JOIN `creaters` on `art`.`creater_id` = `creaters`.`id`";
+        
 
         $query .= " WHERE ";
         if (iconv_strlen($name) > 0 ) {
-            $query .= " `hall_id`= '".$name."'";
+            $query .= " `name`= '".$name."'";
         } 
         if (iconv_strlen($name) > 0 && (iconv_strlen($first_name) > 0 || iconv_strlen($second_name) > 0 ||(iconv_strlen($middle_name) > 0 ) )) {
             $query .= " AND ";
+
         }
 
 
@@ -388,8 +396,6 @@ else if(preg_match_all("/^(update_location_art)$/ui", $_GET['type'])){
         } else {
             $query .= "";
         }
-
-
 
         if (iconv_strlen($second_name) == 0 || preg_match_all("/^(NULL)$/ui", $second_name)) {
             $query .= " ";
@@ -405,6 +411,22 @@ else if(preg_match_all("/^(update_location_art)$/ui", $_GET['type'])){
         else {
             $query .= " AND `creaters`.`middle_name`='" .$middle_name. "'";
         }
+
+
+        if (iconv_strlen($id) > 0 && (iconv_strlen($first_name) > 0 || iconv_strlen($second_name) > 0 || (iconv_strlen($middle_name) > 0 ) || iconv_strlen($name) > 0)) {
+            $query .= " AND ";
+
+        }
+
+        if (iconv_strlen($id) == 0 || preg_match_all("/^(NULL)$/ui", $id)) {
+            $query .= " ";
+        } 
+        else {
+            $query .= " `art`.`id`= '" .$id. "'";
+        }
+
+
+       
 
         $query .= ";";
 
@@ -442,57 +464,7 @@ else if(preg_match_all("/^(update_location_art)$/ui", $_GET['type'])){
 
 
 
-// // обнавить местоположение картины
-// else if(preg_match_all("/^(update_location_art)$/ui", $_GET['type'])){
-//     if(!isset($_GET['hall'])){
-//         echo ajax_echo(
-//             "Ошибка!",
-//             "Вы не указали Get параметр hall!",
-//             true,
-//             "ERROR",
-//             null
-//         );
-//         exit();
-//     }
-//     if(!isset($_GET['name'])){
-//         echo ajax_echo(
-//             "Ошибка!",
-//             "Вы не указали Get параметр name!",
-//             true,
-//             "ERROR",
-//             null
-//         );
-//         exit();
-//     }
 
-//     $query = "UPDATE `art` SET `hall_id`= '".$_GET['hall']."' WHERE `name` = '".$_GET['name']."'";
-
-//     $res_query = mysqli_query($connection, $query);
-
-//     if(!$res_query){
-//         echo ajax_echo(
-//             "Ошибка!",
-//             "Ошибка в запросе!",
-//             true,
-//             "ERROR",
-//             null
-//         );
-//         exit();
-//     }
-    
-//     $ip = get_ip();
-//     $query = "INSERT INTO ip_logs (`ip`,`action`) VALUES ('".$ip."','".$_GET['type']."')";
-//     $res=mysqli_query($connection, $query);
-
-//     echo ajax_echo(
-//         "Уcпех!",
-//         "Местоположение картины изменено в бд!",
-//         false,
-//         "SUCCESS",
-//         null
-//     );
-//     exit();
-// } 
 
 
 // список картин в зале
