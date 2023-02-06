@@ -6,6 +6,41 @@
     include_once('functions.php');
     //include_once('find_token.php');
 
+
+    if((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') || $_SERVER['SERVER_PORT'] == 443) #Получаем протокол сайта.
+    $protocol="https://";
+    else
+    $protocol="http://";
+    $domain=$_SERVER['SERVER_NAME'];
+    $currentUrl=$_SERVER['REQUEST_URI']; 
+    $url=$protocol.$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI'];
+    $new_url = 'http://188.17.157.3/DDPT/Alisa/API/v1/?type=start';
+
+    if ($url == "http://188.17.157.3/DDPT/Alisa/API/v1/"){
+        header('Location: '.$new_url);
+        }
+
+    if (preg_match_all("/^(start)$/ui", $_GET['type'])) {
+
+        $content = "Для быстрого доступа к нужной функции кликните на неё и при необходимости введите данные в пустующие поля в адрессной строке<br>\n
+        <a href='http://188.17.157.3/DDPT/Alisa/API/v1/?type=add_creator&first_name=имя&second_name=фамилия&middle_name=отчество'>добавить автора</a><br>\n
+        <a href='http://188.17.157.3/DDPT/Alisa/API/v1?type=add_type_area&name=имя типа зала'>добавить новый тип зала</a><br>\n
+        <a href='http://188.17.157.3/DDPT/Alisa/API/v1?type=add_hall&name=id_типа_зала'>добавить зал</a><br>\n
+        <a href='http://188.17.157.3/DDPT/Alisa/API/v1?type=add_art&name=название_картины&year_create=год создания&creator=id_автора&hall=id_зала'>добавить картину</a><br>\n
+        <a href='http://188.17.157.3/DDPT/Alisa/API/v1?type=update_area_name&name=новое_имя&name2=старое_имя&id=id_типа_зала'>обновление названия типа зала</a><br>\n
+        <a href='http://188.17.157.3/DDPT/Alisa/API/v1/?type=update_location_art&hall=id_нового_зала&name=имя_картины&first_name=имя_художника&second_name=фамилия_художника&middle_name=отчество_художника&id=id_картины'>обновление местоположения картины</a><br>\n
+        <a href='http://188.17.157.3/DDPT/Alisa/API/v1?type=list_art&hall_name=название_зала&first_name=имя_автора&second_name=фамилия_автора&middle_name=отчество автора'>вывод списка картин в зале</a><br>\n
+        <a href='http://188.17.157.3/DDPT/Alisa/API/v1?type=list_author'>вывод списка художников</a><br>\n
+        <a href='http://188.17.157.3/DDPT/Alisa/API/v1?type=list_hall_type&name=название_жанра'>вывод списка зала с жанром</a><br>\n
+        <a href='http://188.17.157.3/DDPT/Alisa/API/v1?type=ip'>добавление ip собственного устройства</a><br>\n";
+
+	    echo $content;
+    }
+
+
+
+
+
 ///добавить автора
     if(preg_match_all("/^(add_creator)$/ui", $_GET['type'])){
         if(!isset($_GET['first_name'])){
